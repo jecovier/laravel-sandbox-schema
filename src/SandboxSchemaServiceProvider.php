@@ -2,8 +2,6 @@
 
 namespace Jecovier\SandboxSchema;
 
-use Jecovier\ResponseMacros\Exceptions\ApiResponseHandler;
-use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\ServiceProvider;
 
 class SandboxSchemaServiceProvider extends ServiceProvider
