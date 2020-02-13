@@ -13,13 +13,16 @@ class SchemaController extends Controller
     public function index()
     {
         $tables = DB::select('SHOW TABLES');
-        return response()->success($tables);
+        $list = array_map(function ($table) {
+            return $table->Tables_in_promofun;
+        }, $tables);
+        return response()->success('show tables', $list);
     }
 
     public function show(string $table)
     {
         $fields = DB::select('DESC ' . $table);
-        return response()->success($fields);
+        return response()->success($table, $fields);
     }
 
     public function store(Request $request)
@@ -28,9 +31,9 @@ class SchemaController extends Controller
             $table->bigIncrements('id');
             foreach ($request->fields as $field => $type) {
                 $table->$type($field);
-                if ($field) {
-                    $table->foreign($this->schema->relation_field)->references('id')->on($this->schema->relation_table);
-                }
+                // if ($field) {
+                //     $table->foreign($this->schema->relation_field)->references('id')->on($this->schema->relation_table);
+                // }
             }
             $table->timestamps();
         });
@@ -40,8 +43,10 @@ class SchemaController extends Controller
 
     public function update(string $table, Request $request)
     {
-        if ($request->table)
+        if ($request->table) {
             Schema::rename($table, $request->table);
+            $table = $request->table;
+        }
 
         if (!$request->fields)
             return response()->success('table updated');

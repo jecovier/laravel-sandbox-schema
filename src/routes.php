@@ -1,5 +1,5 @@
 <?php
-Route::apiResource('api/sandbox/schema', \Jecovier\SandboxSchema\SchemaController::class);
+Route::apiResource('api/schema', \Jecovier\SandboxSchema\SchemaController::class);
 
 Route::get('api/sandbox/{schema}', \Jecovier\SandboxSchema\SandboxController::class . '@index')
     ->where('schema', '.*');
