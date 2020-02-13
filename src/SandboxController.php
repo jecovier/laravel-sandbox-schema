@@ -93,10 +93,10 @@ class SandboxController extends Controller
     private function getTableFields(String $schema, array $fields)
     {
         try {
-            $fields = DB::select('desc ' . $schema);
+            $fields = DB::select('DESC ' . $schema);
         } catch (\Exception $e) {
             $this->createTable($schema, $fields);
-            $fields = DB::select('desc ' . $schema);
+            $fields = DB::select('DESC ' . $schema);
         }
         return $fields;
     }
