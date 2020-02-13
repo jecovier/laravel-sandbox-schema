@@ -1,4 +1,5 @@
 <?php
+Route::apiResource('api/sandbox/schema', \Jecovier\SandboxSchema\SchemaController::class);
 
 Route::get('api/sandbox/{schema}', \Jecovier\SandboxSchema\SandboxController::class . '@index')
     ->where('schema', '.*');
@@ -8,5 +9,3 @@ Route::put('api/sandbox/{schema}', \Jecovier\SandboxSchema\SandboxController::cl
     ->where('schema', '.*');
 Route::delete('api/sandbox/{schema}', \Jecovier\SandboxSchema\SandboxController::class . '@destroy')
     ->where('schema', '.*');
-
-Route::apiResource('api/sandbox/schema', \Jecovier\SandboxSchema\SchemaController::class);
