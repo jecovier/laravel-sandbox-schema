@@ -1,12 +1,12 @@
 <?php
 
-Route::get('sandbox/{schema}', SandboxController::class . '@index')
+Route::get('api/sandbox/{schema}', SandboxController::class . '@index')
     ->where('schema', '.*');
-Route::post('sandbox/{schema}', SandboxController::class . '@store')
+Route::post('api/sandbox/{schema}', SandboxController::class . '@store')
     ->where('schema', '.*');
-Route::put('sandbox/{schema}', SandboxController::class . '@update')
+Route::put('api/sandbox/{schema}', SandboxController::class . '@update')
     ->where('schema', '.*');
-Route::delete('sandbox/{schema}', SandboxController::class . '@destroy')
+Route::delete('api/sandbox/{schema}', SandboxController::class . '@destroy')
     ->where('schema', '.*');
 
-Route::apiResource('sandbox/schema', SchemaController::class);
+Route::apiResource('api/sandbox/schema', SchemaController::class);
