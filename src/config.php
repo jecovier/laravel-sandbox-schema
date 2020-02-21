@@ -10,7 +10,7 @@ return [
     | API. You may set this to false if you don't need CORS.
     | 
     | Default values:
-    | enable_cors: false,
+    | cors_enabled: false,
     | allow_origins: '*',
     |
     */
