@@ -15,7 +15,10 @@ class SandboxSchemaServiceProvider extends ServiceProvider
             //
         }
 
-        include __DIR__ . '/routes.php';
+        $this->loadRoutesFrom(__DIR__ . '/routes.php');
+        $this->publishes([
+            __DIR__ . '/config.php' => config_path('sanboxschema.php'),
+        ], 'config');
     }
 
     /**
