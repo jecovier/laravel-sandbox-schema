@@ -23,6 +23,9 @@ class SandboxController extends Controller
             throw new \Exception('no record ' . $this->schema->relation_id . ' in ' . $this->schema->relation_table, 404);
         }
 
+        if ($request->method() !== 'POST' && $request->method() !== 'PUT')
+            return;
+
         $table_fields = $this->getTableFields($this->schema->table, $request->except('schema'));
         $this->addNewFields(
             $this->schema->table,
@@ -150,25 +153,16 @@ class SandboxController extends Controller
     {
         if ($this->schema->id) {
             $response = $this->show($schema);
-            return response()->success(
-                'record found',
-                $response
-            );
+            return $this->responseCors($response);
         }
 
         if (!$this->schema->relation_table) {
             $response = DB::table($this->schema->table)->paginate(15);
-            return response()->success(
-                'list of records from ' . $this->schema->table,
-                $response
-            );
+            return $this->responseCors($response);
         }
 
         $response = DB::table($this->schema->table)->where($this->schema->relation_table . '_id', $this->schema->relation_id)->paginate(15);
-        return response()->success(
-            'list of records from ' . $this->schema->table,
-            $response
-        );
+        return $this->responseCors($response);
     }
 
     public function store(String $schema, Request $request)
@@ -176,10 +170,7 @@ class SandboxController extends Controller
         $data = $request->all();
         $data['created_at'] = Carbon::now()->toDateTimeString();
         $response = DB::table($this->schema->table)->insertGetId($data);
-        return response()->success(
-            'new record added to ' . $this->schema->table,
-            $response
-        );
+        return $this->responseCors($response);
     }
 
     public function show(String $schema)
@@ -188,7 +179,7 @@ class SandboxController extends Controller
 
         if (empty($record))
             throw new \Exception("Record not found", 404);
-        return $record;
+        return $this->responseCors($record);
     }
 
     public function update(String $schema, Request $request)
@@ -201,10 +192,7 @@ class SandboxController extends Controller
         if (!$response)
             throw new \Exception("Record can't be updated", 500);
 
-        return response()->success(
-            'record updated succesfully',
-            $response
-        );
+        return $this->responseCors($response);
     }
 
     public function destroy(String $schema)
@@ -215,9 +203,18 @@ class SandboxController extends Controller
         if (!$response)
             throw new \Exception("Record can't be deleted", 500);
 
-        return response()->success(
-            'record deleted succesfully',
-            $response
-        );
+        return $this->responseCors($response);
+    }
+
+    private function responseCors($data)
+    {
+        if (!config('sandboxschema.cors_enabled')) {
+            return response($data);
+        }
+
+        response($data)
+            ->header("Access-Control-Allow-Origin", config('sandboxschema.allow_origins'))
+            ->header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+            ->header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, X-Token-Auth, Authorization");
     }
 }
