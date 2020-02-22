@@ -16,13 +16,13 @@ class SchemaController extends Controller
         $list = array_map(function ($table) {
             return $table->Tables_in_promofun;
         }, $tables);
-        return response()->success('show tables', $list);
+        return response('show tables', $list);
     }
 
     public function show(string $table)
     {
         $fields = DB::select('DESC ' . $table);
-        return response()->success($table, $fields);
+        return response($table, $fields);
     }
 
     public function store(Request $request)
@@ -31,14 +31,11 @@ class SchemaController extends Controller
             $table->bigIncrements('id');
             foreach ($request->fields as $field => $type) {
                 $table->$type($field);
-                // if ($field) {
-                //     $table->foreign($this->schema->relation_field)->references('id')->on($this->schema->relation_table);
-                // }
             }
             $table->timestamps();
         });
 
-        return response()->success('table created');
+        return response('table created');
     }
 
     public function update(string $table, Request $request)
@@ -49,7 +46,7 @@ class SchemaController extends Controller
         }
 
         if (!$request->fields)
-            return response()->success('table updated');
+            return response('table updated');
 
         Schema::table($table, function (Blueprint $table) use ($request) {
             foreach ($request->fields as $field => $type) {
@@ -57,12 +54,12 @@ class SchemaController extends Controller
             }
         });
 
-        return response()->success('table updated');
+        return response('table updated');
     }
 
     public function destroy(string $table)
     {
         Schema::dropIfExists($table);
-        return response()->success('table deleted');
+        return response('table deleted');
     }
 }

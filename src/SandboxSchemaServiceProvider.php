@@ -16,9 +16,6 @@ class SandboxSchemaServiceProvider extends ServiceProvider
         }
 
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
-        $this->publishes([
-            __DIR__ . '/config.php' => config_path('sandboxschema.php'),
-        ], 'config');
     }
 
     /**
